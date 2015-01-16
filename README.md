@@ -34,16 +34,16 @@ Add this to `build.sbt`:
 
 ## Working with PFView ##
 ### Creating an Instance ###
-Create an `UnTwirl` instance and invoke the `++` method to provide content to be appended to the UnTwirl's instance's internal `StringBuilder` buffer.
-When the UnTwirl instance has been created, it returns the contents of the buffer as a String - just send that String to the client.
+Create an `PFView` instance and invoke the `++` method to provide content to be appended to the PFView's instance's internal `StringBuilder` buffer.
+When the PFView instance has been created, it returns the contents of the buffer as a String - just send that String to the client.
 That's all there is to it!
 
-There are several ways of creating `UnTwirl` instances:
+There are several ways of creating `PFView` instances:
 
- * To define a view, define an `object` that extends `UnTwirl`.
+ * To define a view, define an `object` that extends `PFView`.
     The `object` needs to define a method called `apply` which returns `Html`, for Play compatibility. This example shows  no arguments, but you can have as many arguments and argument lists as required:
 ````
-object blah extends UnTwirl {
+object blah extends PFView {
   def apply() = Html {
     ++("<h1>This is a test</h1>")
     ++{s"""<p>The time is now ${new java.util.Date}
@@ -53,19 +53,19 @@ object blah extends UnTwirl {
 }
 ````
 
- * Define a method that creates an anonymous subclass of `UnTwirl`, which is then implicitly converted to String. This is useful for complex, dynamic content.
+ * Define a method that creates an anonymous subclass of `PFView`, which is then implicitly converted to String. This is useful for complex, dynamic content.
 
 ````
-def content(msg: String): String = UnTwirl {
+def content(msg: String): String = PFView {
   ++(msg * 2)
 }
 ````
 
-* `UnTwirl` instances can be recursively nested:
+* `PFView` instances can be recursively nested:
 ````
-object NestedExample extends UnTwirl {
+object NestedExample extends PFView {
   def apply(msg: String=""): Html = Html {
-    def content(msg: String): String = UnTwirl {
+    def content(msg: String): String = PFView {
       ++(msg * 2)
     }
 
@@ -79,15 +79,16 @@ object NestedExample extends UnTwirl {
 The following methods are provided by `PFView`:
 
  * `++` - adds content to the buffer
- * `unIf` - convenience method; `unIf (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`. Useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `unIf` expression.
+ * `unIf` - a convenience method; `unIf (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`.
+This method is useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `unIf` expression.
 
 ## AntiPatterns ##
 *IMPORTANT!* - Play is a multi-threaded framework. Views must either contain references to singleton objects, or reference variables on the stack or heap.
 
- * Defining an object that extends `UnTwirl` that does not use immutable objects in a multithreading environment is asking for trouble.
+ * Defining an object that extends `PFView` that does not use immutable objects in a multithreading environment is asking for trouble.
 
 ````
-object ick extends UnTwirl {
+object ick extends PFView {
   ++("ick")
 }
 ````
@@ -96,7 +97,7 @@ Use `lazy vals` instead to ensure the expression is evaluated only once:
 
 ````
 object ick {
-  lazy val content = UnTwirl {
+  lazy val content = PFView {
     ++("ick")
   }
   content
