@@ -41,7 +41,7 @@ That's all there is to it!
 There are several ways of creating `UnTwirl` instances:
 
  * To define a view, define an `object` that extends `UnTwirl`.
-    The `object` needs to define a no-argument method called `apply` which returns `Html`, for Play compatibility.
+    The `object` needs to define a method called `apply` which returns `Html`, for Play compatibility. This example shows  no arguments, but you can have as many arguments and argument lists as required:
 ````
 object blah extends UnTwirl {
   def apply() = Html {
