@@ -3,15 +3,15 @@ package views
 import play.api.templates.Html
 import scala.language.implicitConversions
 
-object UnTwirl {
+object PFView {
   def apply(block: => Any): String = {
-    val unTwirl = new UnTwirl
+    val pfView = new PFView
     block
-    unTwirl.sb.toString()
+    pfView.sb.toString()
   }
 }
 
-trait UnTwirlImplicits {
+trait PFViewImplicits {
   implicit def sbToString(sb: StringBuilder): String = sb.toString()
 
   implicit def appendableToString(appendable: play.api.templates.HtmlFormat.Appendable): String = appendable.toString()
@@ -23,7 +23,7 @@ trait UnTwirlImplicits {
   implicit def stringToHtml(string: String): Html = Html(string)
 }
 
-class UnTwirl extends UnTwirlImplicits {
+class PFView extends PFViewImplicits {
   val sb = new StringBuilder("")
 
   // TODO incorporate https://gist.github.com/javierfs89/eca13fa3429af26b9ac9

@@ -4,7 +4,7 @@ import org.scalatest.WordSpec
 import play.api.templates.Html
 import scala.language.implicitConversions
 
-class UnTwirlTest extends WordSpec {
+class PFViewTest extends WordSpec {
 
   def dump(expected: String, actual: String): Boolean = {
     val isEqual: Boolean = expected == actual
@@ -18,37 +18,37 @@ class UnTwirlTest extends WordSpec {
     isEqual
   }
 
-  object nada extends UnTwirl { }
+  object nada extends PFView { }
 
-  object empty extends UnTwirl {
+  object empty extends PFView {
     ++()
   }
 
   /** Only use this pattern in a single-threaded environment */
-  object ick extends UnTwirl {
+  object ick extends PFView {
     ++("ick")
   }
 
-  object blah extends UnTwirl {
+  object blah extends PFView {
     def apply() = Html {
       ++("blah")
     }
   }
 
-  object adminGroupDetails extends UnTwirl {
+  object nested extends PFView {
     def apply(msg: String=""): Html = Html {
 
       /** If this method is the last thing in the apply method, it won't compile!!! */
-      def content(msg: String): String = UnTwirl {
+      def content(msg: String): String = PFView {
         ++(msg * 2)
       }
 
-      val groupContent: String = content(msg)
-      ++(groupContent)
+      val moreContent: String = content(msg)
+      ++(moreContent)
     }
   }
 
-  def huh = new UnTwirl {
+  def huh = new PFView {
     ++("huh")
   }
 
@@ -59,7 +59,7 @@ class UnTwirlTest extends WordSpec {
       assert(huh.toString=="huh")
       assert(ick.toString=="ick")
       assert(blah().toString=="blah")
-      assert(adminGroupDetails("x").toString=="xx")
+      assert(nested("x").toString=="xx")
     }
   }
 }
