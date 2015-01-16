@@ -79,7 +79,7 @@ object NestedExample extends UnTwirl {
 The following methods are provided by `PFView`:
 
  * `++` - adds content to the buffer
- * `unIf` - convenience method; `unIf (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`. Useful within string interpolation.
+ * `unIf` - convenience method; `unIf (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`. Useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `unIf` expression.
 
 ## AntiPatterns ##
 *IMPORTANT!* - Play is a multi-threaded framework. Views must either contain references to singleton objects, or reference variables on the stack or heap.
