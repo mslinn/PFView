@@ -40,10 +40,8 @@ That's all there is to it!
 
 There are several ways of creating `UnTwirl` instances:
 
- 1. To define a view, define an `object` that extends `UnTwirl`.
+ * To define a view, define an `object` that extends `UnTwirl`.
     The `object` needs to define a no-argument method called `apply` which returns `Html`, for Play compatibility.
-
-
 ````
 object blah extends UnTwirl {
   def apply() = Html {
@@ -55,7 +53,7 @@ object blah extends UnTwirl {
 }
 ````
 
- 1. Define a method that creates an anonymous subclass of `UnTwirl`, which is then implicitly converted to String. This is useful for complex, dynamic content.
+ * Define a method that creates an anonymous subclass of `UnTwirl`, which is then implicitly converted to String. This is useful for complex, dynamic content.
 
 ````
 def content(msg: String): String = UnTwirl {
@@ -63,8 +61,7 @@ def content(msg: String): String = UnTwirl {
 }
 ````
 
- 1. `UnTwirl` instances can be recursively nested:
-
+* `UnTwirl` instances can be recursively nested:
 ````
 object NestedExample extends UnTwirl {
   def apply(msg: String=""): Html = Html {
@@ -87,7 +84,7 @@ The following methods are provided by `Focus`:
 ## AntiPatterns ##
 *IMPORTANT!* - Play is a multi-threaded framework. Views must either contain references to singleton objects, or reference variables on the stack or heap.
 
- 1. Defining an object that extends `UnTwirl` that does not use immutable objects in a multithreading environment is asking for trouble.
+ * Defining an object that extends `UnTwirl` that does not use immutable objects in a multithreading environment is asking for trouble.
 
 ````
 object ick extends UnTwirl {
