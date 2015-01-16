@@ -1,6 +1,6 @@
 # PFView #
 
-`PFView` is a replacement for Play Framework's [Twirl template language](https://github.com/playframework/twirlhttps://github.com/playframework/twirl).
+`PFView` is a drop-in replacement for Play Framework's [Twirl template language](https://github.com/playframework/twirlhttps://github.com/playframework/twirl).
 `PFView` is:
 
  * Simpler
