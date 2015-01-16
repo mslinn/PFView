@@ -26,7 +26,7 @@ As well, `Twirl` has an awkward syntax and limited capabilities compared to othe
 PFView is 100% Scala.
 
 ## Installing ##
-This section is just fantasy at present. Need to settle on a name first.
+This section is just fantasy at present - the project is not yet on a repo.
 
 Add this to `build.sbt`:
 
