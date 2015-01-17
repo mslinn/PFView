@@ -1,3 +1,5 @@
+import bintray.Keys._
+
 name := """PFView"""
 
 version := "0.0.1"
@@ -20,6 +22,12 @@ libraryDependencies ++= Seq(
   "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
 )
 
-bintraySettings
+publishMavenStyle := false
+
+bintrayPublishSettings
+
+repository in bintray := "play"
+
+publishArtifact in Test := false
 
 com.typesafe.sbt.SbtGit.versionWithGit
