@@ -91,9 +91,14 @@ This method is useful within string interpolation. Unlike Twirl's `@if` expressi
 object ick extends PFView {
   ++("ick")
 }
+
+object blah extends PFView {
+  var blah = System.currentTime
+  ++(blah.toString)
+}
 ````
 
-Use `lazy vals` instead to ensure the expression is evaluated only once:
+Use `lazy vals` or wrap in a class instead to ensure the expression is evaluated only once:
 
 ````
 object ick {
@@ -101,6 +106,16 @@ object ick {
     ++("ick")
   }
   content
+}
+
+class Yes extends PFView {
+  ++("yes")
+}
+
+object yes {
+  def apply() = {
+    new Yes
+  }
 }
 ````
 
