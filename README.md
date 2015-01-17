@@ -27,9 +27,15 @@ PFView is 100% Scala.
 
 ## Installing ##
 
-Add this to `build.sbt`:
+Add two lines to `build.sbt`.
+
+ * Add the `pfview` dependency:
 
     "com.micronautics" %% "pfview" % "0.0.1" withSources()
+
+ * Add this to the `resolvers`:
+
+    Resolver.url("mslinn/play on bintray", url("http://dl.bintray.com/mslinn/play"))(Resolver.ivyStylePatterns)
 
 ## Working with PFView ##
 ### Creating an Instance ###
