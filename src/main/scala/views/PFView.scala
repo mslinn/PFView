@@ -27,9 +27,11 @@ class PFView extends PFViewImplicits {
   val sb = new StringBuilder("")
 
   // TODO incorporate https://gist.github.com/javierfs89/eca13fa3429af26b9ac9
-  def ++(s: => String=""): StringBuilder = sb.append(s)
+  @inline def ++(s: => String=""): StringBuilder = sb.append(s)
 
-  def unIf(predicate: Boolean)(thenClause: => String): String = if (predicate) thenClause else ""
+  @inline def unIf(predicate: Boolean)(thenClause: => String): String = if (predicate) thenClause else ""
+
+  @inline def If(predicate: Boolean)(thenClause: => String): String = unIf (predicate) (thenClause)
 
   override def toString: String = sb.toString()
 }
