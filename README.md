@@ -36,8 +36,10 @@ Add two lines to `build.sbt`.
 
  * Add this to the `resolvers`:
 ````
-Resolver.url("mslinn/play on bintray", url("http://dl.bintray.com/mslinn/play"))(Resolver.ivyStylePatterns)
+"micronautics/play on bintray" on "http://dl.bintray.com/micronautics/play"
 ````
+
+This library has been built against Scala 2.10.4 / Play 2.2.6 and Scala 2.11.5 / Play 2.3.7.
 
 ## Working with PFView ##
 ### Creating an Instance ###

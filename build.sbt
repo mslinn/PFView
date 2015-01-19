@@ -14,18 +14,18 @@ scalacOptions ++= Seq("-deprecation", "-encoding", "UTF-8", "-feature", "-target
     "-Ywarn-adapted-args", "-Ywarn-value-discard", "-Xlint")
 
 scalaVersion := "2.10.4"
+//scalaVersion := "2.11.5"
 
 crossScalaVersions := Seq("2.10.4", "2.11.5")
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play"      % "2.2.6" % "provided",
+  //"com.typesafe.play" %% "play"      % "2.3.7" % "provided",
   "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
 )
 
-publishMavenStyle := false
-
 bintrayPublishSettings
-
+bintrayOrganization in bintray := Some("micronautics")
 repository in bintray := "play"
 
 publishArtifact in Test := false
