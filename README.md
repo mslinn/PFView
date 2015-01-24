@@ -44,42 +44,52 @@ This library has been built against Scala 2.10.4 / Play 2.2.6 and Scala 2.11.5 /
 ## Working with PFView ##
 ### Creating an Instance ###
 Create an `PFView` instance and invoke the `++` method to provide content to be appended to the PFView's instance's internal `StringBuilder` buffer.
-When the PFView instance has been created, it returns the contents of the buffer as a String - just send that String to the client.
+When the PFView instance has been created, it returns the contents of the buffer as a `String` - just send that `String` to the web client.
 That's all there is to it!
 
-There are several ways of creating `PFView` instances:
+There are several ways of creating `PFView` instances. Examples of all of these are provided in the unit tests.
 
- * To define a view, define an `object` that extends `PFView`.
-    The `object` needs to define a method called `apply` which returns `Html`, for Play compatibility. This example shows  no arguments, but you can have as many arguments and argument lists as required:
+ * To define a static view, define an `object` that extends `PFView`.
 ````
-object blah extends PFView {
-  def apply() = Html {
+object staticView extends PFView {
     ++("<h1>This is a test</h1>")
     ++{s"""<p>The time is now ${new java.util.Date}
           |This is another line</p>
           |${ unIf (6==9) { "Somehow 6 equals 9" } }""".stripMargin}
-  }
 }
 ````
 
- * Define a method that creates an anonymous subclass of `PFView`, which is then implicitly converted to String. This is useful for complex, dynamic content.
+ * To define a Twirl-compatible dynamic view, define an `object` that does not extend `PFView`.
+   The `object` needs to define a method called `apply` that returns `Html`.
+````
+object dynamicView {
+  def apply(suffix: String): Html = new PFView {
+    ++(s"Feeling $suffix?")
+  }.toHtml
+}
+````
+Of course, `apply` can be defined have as many arguments and argument lists as required, including typical play signatures such as:
+`def apply(suffix: String)(implicit request: RequestHeader): Html`
+
+ * Define a method that creates an anonymous subclass of `PFView`, which is then implicitly converted to `String`.
+   This is useful for complex, dynamic repeatContent.
 
 ````
-def content(msg: String): String = PFView {
-  ++(msg * 2)
+def simple = new PFView {
+  ++("simple")
 }
 ````
 
 * `PFView` instances can be recursively nested:
 ````
-object NestedExample extends PFView {
-  def apply(msg: String=""): Html = Html {
-    def content(msg: String): String = PFView {
+object nestedViews {
+  def apply(msg: String="") = new PFView {
+    def repeatContent(msg: String): String = new PFView {
       ++(msg * 2)
-    }
+    }.toString
 
-    val groupContent: String = content(msg)
-    ++(groupContent)
+    val repeatedContent = repeatContent(msg)
+    ++(repeatedContent)
   }
 }
 ````
@@ -87,44 +97,6 @@ object NestedExample extends PFView {
 ### Methods ###
 The following methods are provided by `PFView`:
 
- * `++` - adds content to the buffer
+ * `++` - adds repeatContent to the buffer
  * `If` - a convenience method; `If (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`.
 This method is useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `If` expression.
-
-## AntiPatterns ##
-*IMPORTANT!* - Play is a multi-threaded framework. Views must either contain references to singleton objects, or reference variables on the stack or heap.
-
- * Defining an object that extends `PFView` that does not use immutable objects in a multithreading environment is asking for trouble.
-
-````
-object ick extends PFView {
-  ++("ick")
-}
-
-object blah extends PFView {
-  var blah = System.currentTime
-  ++(blah.toString)
-}
-````
-
-Use `lazy vals` or wrap in a class instead to ensure the expression is evaluated only once:
-
-````
-object ick {
-  lazy val content = PFView {
-    ++("ick")
-  }
-  content
-}
-
-class Yes extends PFView {
-  ++("yes")
-}
-
-object yes {
-  def apply() = {
-    new Yes
-  }
-}
-````
-

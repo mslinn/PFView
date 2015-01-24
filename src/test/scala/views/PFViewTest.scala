@@ -5,7 +5,6 @@ import play.api.templates.Html
 import scala.language.implicitConversions
 
 class PFViewTest extends WordSpec {
-
   def dump(expected: String, actual: String): Boolean = {
     val isEqual: Boolean = expected == actual
     if (!isEqual) {
@@ -24,42 +23,47 @@ class PFViewTest extends WordSpec {
     ++()
   }
 
-  /** Only use this pattern in a single-threaded environment */
-  object ick extends PFView {
-    ++("ick")
+  object staticView extends PFView {
+    ++("static")
+    ++(" view")
   }
 
-  object blah extends PFView {
-    def apply() = Html {
-      ++("blah")
+  object dynamicView {
+    def apply(suffix: String) = new PFView {
+      ++(s"Feeling $suffix?")
+      ++(" Gotta go!")
     }
   }
 
-  object nested extends PFView {
-    def apply(msg: String=""): Html = Html {
-
-      /** If this method is the last thing in the apply method, it won't compile!!! */
-      def content(msg: String): String = PFView {
+  object nestedViews {
+    def apply(msg: String="") = new PFView {
+      def repeatContent(msg: String): String = new PFView {
         ++(msg * 2)
-      }
+      }.toString
 
-      val moreContent: String = content(msg)
-      ++(moreContent)
+      val repeatedContent = repeatContent(msg)
+      ++(repeatedContent)
     }
   }
 
-  def huh = new PFView {
-    ++("huh")
+  def simple = new PFView {
+    ++("simple")
   }
 
   "UnTwirl" should {
-    "work" in {
+    "work" in {  // repeat tests to ensure buffer is initialized properly
+      assert(nada.toString=="")
       assert(nada.toString=="")
       assert(empty.toString=="")
-      assert(huh.toString=="huh")
-      assert(ick.toString=="ick")
-      assert(blah().toString=="blah")
-      assert(nested("x").toString=="xx")
+      assert(empty.toString=="")
+      assert(staticView.toString=="static view")
+      assert(staticView.toString=="static view")
+      assert(dynamicView("good").toString=="Feeling good? Gotta go!")
+      assert(dynamicView("bad").toString=="Feeling bad? Gotta go!")
+      assert(nestedViews("x").toString=="xx")
+      assert(nestedViews("x").toString=="xx")
+      assert(simple.toString=="simple")
+      assert(simple.toString=="simple")
     }
   }
 }

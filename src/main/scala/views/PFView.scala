@@ -5,13 +5,17 @@ import scala.language.implicitConversions
 
 object PFView {
   def apply(block: => Any): String = {
-    val pfView = new PFView
-    block
-    pfView.sb.toString()
+    val pfView = new PFView{}
+    pfView.++(block.toString)
+    pfView.toString()
   }
 }
 
 trait PFViewImplicits {
+  implicit def pfViewToHtml(pfView: PFView): String = Html(pfView.toString())
+
+  implicit def pfViewToString(pfView: PFView): String = pfView.toString()
+
   implicit def sbToString(sb: StringBuilder): String = sb.toString()
 
   implicit def appendableToString(appendable: play.api.templates.HtmlFormat.Appendable): String = appendable.toString()
@@ -23,8 +27,8 @@ trait PFViewImplicits {
   implicit def stringToHtml(string: String): Html = Html(string)
 }
 
-class PFView extends PFViewImplicits {
-  val sb = new StringBuilder("")
+trait PFView extends PFViewImplicits {
+  implicit val sb = new StringBuilder("")
 
   // TODO incorporate https://gist.github.com/javierfs89/eca13fa3429af26b9ac9
   @inline def ++(s: => String=""): StringBuilder = sb.append(s)
@@ -32,6 +36,8 @@ class PFView extends PFViewImplicits {
   @inline def unIf(predicate: Boolean)(thenClause: => String): String = if (predicate) thenClause else ""
 
   @inline def If(predicate: Boolean)(thenClause: => String): String = unIf (predicate) (thenClause)
+
+  def toHtml = Html(toString)
 
   override def toString: String = sb.toString()
 }

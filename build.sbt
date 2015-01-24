@@ -2,7 +2,7 @@ import bintray.Keys._
 
 name := """PFView"""
 
-version := "0.0.1"
+version := "0.0.2"
 
 organization := "com.micronautics"
 
@@ -18,12 +18,19 @@ scalaVersion := "2.10.4"
 
 crossScalaVersions := Seq("2.10.4", "2.11.5")
 
-libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play"      % "2.2.6" % "provided",
-  //"com.typesafe.play" %% "play"      % "2.3.7" % "provided",
-  "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
-)
+libraryDependencies <++= scalaVersion {
+  case sv if sv.startsWith("2.11") =>
+    Seq(
+      "com.typesafe.play" %% "play"      % "2.3.7" % "provided",
+      "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
+    )
 
+  case sv if sv.startsWith("2.10") =>
+    Seq(
+      "com.typesafe.play" %% "play"      % "2.2.6" % "provided",
+      "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
+    )
+}
 bintrayPublishSettings
 bintrayOrganization in bintray := Some("micronautics")
 repository in bintray := "play"
