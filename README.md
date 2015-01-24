@@ -72,7 +72,7 @@ Of course, `apply` can be defined have as many arguments and argument lists as r
 `def apply(suffix: String)(implicit request: RequestHeader): Html`
 
  * Define a method that creates an anonymous subclass of `PFView`, which is then implicitly converted to `String`.
-   This is useful for complex, dynamic repeatContent.
+   This is useful for complex, dynamic content.
 
 ````
 def simple = new PFView {
@@ -97,6 +97,6 @@ object nestedViews {
 ### Methods ###
 The following methods are provided by `PFView`:
 
- * `++` - adds repeatContent to the buffer
+ * `++` - adds content to the buffer
  * `If` - a convenience method; `If (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`.
 This method is useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `If` expression.
