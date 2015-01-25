@@ -31,7 +31,7 @@ Add two lines to `build.sbt`.
 
  * Add the `pfview` dependency:
 ````
-"com.micronautics" %% "pfview" % "0.0.2" withSources()
+"com.micronautics" %% "pfview" % "0.0.3" withSources()
 ````
 
  * Add this to the `resolvers`:
@@ -48,16 +48,6 @@ When the PFView instance has been created, it returns the contents of the buffer
 That's all there is to it!
 
 There are several ways of creating `PFView` instances. Examples of all of these are provided in the unit tests.
-
- * To define a static view, define an `object` that extends `PFView`.
-````
-object staticView extends PFView {
-    ++("<h1>This is a test</h1>")
-    ++{s"""<p>The time is now ${new java.util.Date}
-          |This is another line</p>
-          |${ unIf (6==9) { "Somehow 6 equals 9" } }""".stripMargin}
-}
-````
 
  * To define a Twirl-compatible dynamic view, define an `object` that does not extend `PFView`.
    The `object` needs to define a method called `apply` that returns `Html`.
@@ -94,9 +84,26 @@ object nestedViews {
 }
 ````
 
+ * To define a static view, define an `object` that extends `PFView`. This should only be done when assigning the result to a lazy val.
+````
+object staticView extends PFView {
+    ++("<h1>This is a test</h1>")
+    ++{s"""<p>The time is now ${new java.util.Date}
+          |This is another line</p>
+          |${ unIf (6==9) { "Somehow 6 equals 9" } }""".stripMargin}
+}
+````
+
 ### Methods ###
 The following methods are provided by `PFView`:
 
  * `++` - adds content to the buffer
  * `If` - a convenience method; `If (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`.
 This method is useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `If` expression.
+ * `includeFile` - include the contents of a local file; localized versions of files are searched for, according to standard i18n behavior.
+For example, if `filePath` is specified as `blah.html` and `lang` is specified as `en-US` then the file `blah_en-US.html` is searched for, then `blah_en.html` and then `blah.html` is searched for.
+ * `includeUrl` - include the contents of the web page pointed to by a URL. Relative URLs are not supported. The default encoding is UTF-8.
+For example, include a GitHub gist like this:
+````
+includeUrl("https://gist.githubusercontent.com/mslinn/1f64f68ea192f3e51ce1/raw/684b622ea248f2238d0c4a31cc98617384387def/installActivator.sh")
+````

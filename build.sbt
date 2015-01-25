@@ -2,7 +2,7 @@ import bintray.Keys._
 
 name := """PFView"""
 
-version := "0.0.2"
+version := "0.0.3"
 
 organization := "com.micronautics"
 
@@ -22,13 +22,13 @@ libraryDependencies <++= scalaVersion {
   case sv if sv.startsWith("2.11") =>
     Seq(
       "com.typesafe.play" %% "play"      % "2.3.7" % "provided",
-      "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
+      "org.scalatestplus" %% "play"      % "1.2.0" % "test"
     )
 
   case sv if sv.startsWith("2.10") =>
     Seq(
       "com.typesafe.play" %% "play"      % "2.2.6" % "provided",
-      "org.scalatest"     %% "scalatest" % "2.2.1" % "test"
+      "org.scalatestplus" %% "play"      % "1.0.0" % "test"
     )
 }
 bintrayPublishSettings
@@ -38,3 +38,22 @@ repository in bintray := "play"
 publishArtifact in Test := false
 
 com.typesafe.sbt.SbtGit.versionWithGit
+
+// define the statements initially evaluated when entering 'console', 'console-quick' but not 'console-project'
+initialCommands in console := """ // make app resources accessible
+   |Thread.currentThread.setContextClassLoader(getClass.getClassLoader)
+   |new play.core.StaticApplication(new java.io.File("."))
+   |
+   |//import play.api.{ DefaultApplication, Mode, Play }
+   |//val applicationPath = new java.io.File(".")
+   |//val classLoader = this.getClass.getClassLoader
+   |//val sources = None
+   |//val applicationMode = Mode.Dev
+   |//Play.start(new DefaultApplication(applicationPath, classLoader, sources, applicationMode))
+   |
+   |import java.net.URL
+   |import java.text.DateFormat
+   |import java.util.Locale
+   |import play.api.Play.current
+   |import play.Logger
+   |""".stripMargin

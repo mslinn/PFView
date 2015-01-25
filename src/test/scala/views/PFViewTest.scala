@@ -1,10 +1,13 @@
 package views
 
-import org.scalatest.WordSpec
-import play.api.templates.Html
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
+import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
+import play.api.test.FakeApplication
 import scala.language.implicitConversions
 
-class PFViewTest extends WordSpec {
+class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter with OneAppPerSuite {
+  implicit override lazy val app: FakeApplication = FakeApplication()
+
   def dump(expected: String, actual: String): Boolean = {
     val isEqual: Boolean = expected == actual
     if (!isEqual) {
@@ -19,7 +22,7 @@ class PFViewTest extends WordSpec {
 
   object nada extends PFView { }
 
-  object empty extends PFView {
+  object emptyView extends PFView {
     ++()
   }
 
@@ -50,20 +53,56 @@ class PFViewTest extends WordSpec {
     ++("simple")
   }
 
-  "UnTwirl" should {
+  def include_en = new PFView {
+    implicit val lang = play.api.i18n.Lang("en")
+    includeFile("blah.html", "src/test/resources/public")
+  }
+
+  def `include_en-US` = new PFView {
+    implicit val lang = play.api.i18n.Lang("en-US")
+    includeFile("blah.html", "src/test/resources/public")
+  }
+
+  def includeMissing = new PFView {
+    implicit val lang = play.api.i18n.Lang("fr")
+    includeFile("blah.html", "src/test/resources/public")
+  }
+
+  def includeUrl = new PFView {
+    includeUrl("https://github.com/mslinn/PFView")
+  }
+
+  "PFView" should {
     "work" in {  // repeat tests to ensure buffer is initialized properly
       assert(nada.toString=="")
       assert(nada.toString=="")
-      assert(empty.toString=="")
-      assert(empty.toString=="")
+
+      assert(emptyView.toString=="")
+      assert(emptyView.toString=="")
+
       assert(staticView.toString=="static view")
       assert(staticView.toString=="static view")
+
       assert(dynamicView("good").toString=="Feeling good? Gotta go!")
       assert(dynamicView("bad").toString=="Feeling bad? Gotta go!")
+
       assert(nestedViews("x").toString=="xx")
       assert(nestedViews("x").toString=="xx")
+
       assert(simple.toString=="simple")
       assert(simple.toString=="simple")
+
+      assert(includeUrl.toString.contains("Pull Requests"))
+      assert(includeUrl.toString.contains("Pull Requests"))
+
+      assert(includeMissing.toString=="This is the generic version of blah.html\n")
+      assert(includeMissing.toString=="This is the generic version of blah.html\n")
+
+      assert(include_en.toString=="This is the en version of blah.html\n")
+      assert(include_en.toString=="This is the en version of blah.html\n")
+
+      assert(`include_en-US`.toString=="This is the en-US version of blah.html\n")
+      assert(`include_en-US`.toString=="This is the en-US version of blah.html\n")
     }
   }
 }
