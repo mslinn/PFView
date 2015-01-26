@@ -108,7 +108,7 @@ This method is useful within string interpolation. Unlike Twirl's `@if` expressi
  * `includeFile` - include the contents of a local file; localized versions of files are searched for, according to standard i18n behavior.
 For example, if `filePath` is specified as `blah.html` and `lang` is specified as `en-US` then the file `blah_en-US.html` is searched for, then `blah_en.html` and then `blah.html` is searched for.
  * `includeUrl` - include the contents of the web page pointed to by a URL. Relative URLs are not supported. The default encoding is UTF-8.
-For example, include a GitHub gist like this:
+For example, include this `README.md` file from its GitHub repo like this:
 ````
-includeUrl("https://gist.githubusercontent.com/mslinn/1f64f68ea192f3e51ce1/raw/684b622ea248f2238d0c4a31cc98617384387def/installActivator.sh")
+includeUrl("https://raw.githubusercontent.com/mslinn/PFView/master/README.md")
 ````
