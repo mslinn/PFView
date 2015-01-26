@@ -1,9 +1,10 @@
 ![PFView logo](https://raw.githubusercontent.com/mslinn/PFView/master/images/pfview_355x148.png "PFView Logo")
 
 `PFView` is a drop-in replacement for Play Framework's [Twirl template language](https://github.com/playframework/twirlhttps://github.com/playframework/twirl).
-`PFView` is:
+Twirl is good for simple view templates because for simple pages, the HTML structure is left mostly intact.
+For more complex pages, `PFView` is:
 
- * Simpler
+ * Simpler to write
  * Faster, because conversions between XML elements, `Html` and `String` can be eliminated. The job of a view is to generate a `String` that is sent to a client.
  * Testable
  * Debuggable
@@ -14,7 +15,7 @@ The job of a view is to work with data passed from a controller, as well as glob
 No business logic should exist in a view, however traversing data structures requires an expressive computing language.
 
 `PFView` was created to overcome `Twirl`'s shortcomings:
- * Generates Scala code which is an unreadable mess, that is horrible to debug
+ * Generates Scala code which is an unreadable mess, which is horrible to debug
  * Cannot be refactored by any available IDE
  * Components must be stored in separate files, instead of merely defining a class or method
  * DSL is less expressive than Scala, and is not a successful functional language.
@@ -24,6 +25,10 @@ As a result, a non-trivial `Twirl` template becomes an unholy mess that is diffi
 
 As well, `Twirl` has an awkward syntax and limited capabilities compared to other view templating languages, such as ASP, JSP, JSP EL, etc.
 PFView is 100% Scala.
+
+When Adobe Flex was popular, it was common to initially write view templates in [MXML](http://en.wikipedia.org/wiki/MXML),
+then rewrite them in [ActionScript](http://en.wikipedia.org/wiki/ActionScript) as complexity increased.
+MXML is to Twirl as ActionScript is to PFView.
 
 ## Installing ##
 
