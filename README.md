@@ -114,9 +114,25 @@ then if not found `blah_en.html` is searched for and finally `blah.html` is sear
 ````
 includeFile("blah.html")
 ````
+You can also specify the `lang` argument explicitly:
+````
+includeFile("blah.html")(Lang("fr")
+````
+By default, files are searched for in the `public` directory. You can override this by specifying a value for `baseDir`; the value can be relative or absolute.
+````
+includeFile("blah.html", "/var/tmp")
+````
+also:
+````
+includeFile("blah.html", "/var/tmp")(Lang("de")
+````
  * `includeUrl` - append the contents of the web page pointed to by a URL into the buffer.
-Relative URLs are not supported. The default encoding is UTF-8.
+Relative URLs are not supported. The default [encoding](https://www.playframework.com/documentation/2.3.x/api/scala/index.html#play.api.mvc.Codec) is UTF-8.
 For example, include this `README.md` file from its GitHub repo like this:
 ````
 includeUrl("https://raw.githubusercontent.com/mslinn/PFView/master/README.md")
+````
+You can specify an alternative encoding like this:
+````
+includeUrl("https://raw.githubusercontent.com/mslinn/PFView/master/README.md", "iso-8859-1")
 ````
