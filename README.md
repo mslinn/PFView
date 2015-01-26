@@ -102,12 +102,20 @@ object staticView extends PFView {
 ### Methods ###
 The following methods are provided by `PFView`:
 
- * `++` - adds content to the buffer
- * `If` - a convenience method; `If (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`.
+ * `++` - appends content to the buffer
+ * `If` - a convenience method for conditionally appending content to the buffer.
+`If (condition) { thenClause }` is equivalent to `if (condition) thenClause else ""`.
 This method is useful within string interpolation. Unlike Twirl's `@if` expression, spaces can exist anywhere in an `If` expression.
- * `includeFile` - include the contents of a local file; localized versions of files are searched for, according to standard i18n behavior.
-For example, if `filePath` is specified as `blah.html` and `lang` is specified as `en-US` then the file `blah_en-US.html` is searched for, then `blah_en.html` and then `blah.html` is searched for.
- * `includeUrl` - include the contents of the web page pointed to by a URL. Relative URLs are not supported. The default encoding is UTF-8.
+ * `includeFile` - append the contents of a local file into the buffer; localized versions of files are searched for,
+according to standard [i18n](http://en.wikipedia.org/wiki/Internationalization_and_localization) behavior using the value of the implicit
+[Lang](https://www.playframework.com/documentation/2.3.x/api/scala/index.html#play.api.i18n.Lang) parameter.
+For example, if `filePath` is specified as `blah.html` and `lang` has the value `en-US` then the file `blah_en-US.html` is searched for,
+then if not found `blah_en.html` is searched for and finally `blah.html` is searched for.
+````
+includeFile("blah.html")
+````
+ * `includeUrl` - append the contents of the web page pointed to by a URL into the buffer.
+Relative URLs are not supported. The default encoding is UTF-8.
 For example, include this `README.md` file from its GitHub repo like this:
 ````
 includeUrl("https://raw.githubusercontent.com/mslinn/PFView/master/README.md")
