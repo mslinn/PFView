@@ -21,7 +21,7 @@ crossScalaVersions := Seq("2.10.4", "2.11.5")
 libraryDependencies <++= scalaVersion {
   case sv if sv.startsWith("2.11") =>
     Seq(
-      "com.typesafe.play" %% "play"      % "2.3.7" % "provided",
+      "com.typesafe.play" %% "play"      % "2.3.8" % "provided",
       "org.scalatestplus" %% "play"      % "1.2.0" % "test"
     )
 
