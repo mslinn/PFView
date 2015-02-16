@@ -1,5 +1,10 @@
 ![PFView logo](https://raw.githubusercontent.com/mslinn/PFView/master/images/pfview_355x148.png "PFView Logo")
 
+This project is sponsored by [Micronautics Research Corporation](http://www.micronauticsresearch.com/),
+the company that delivers online Scala and Play training via [ScalaCourses.com](http://www.ScalaCourses.com).
+You can learn exactly how this project works by taking the [Introduction to Scala](http://www.ScalaCourses.com/showCourse/40),
+[Intermediate Scala](http://www.ScalaCourses.com/showCourse/45) and [Introduction to Play](http://www.ScalaCourses.com/showCourse/39) courses.
+
 `PFView` is a drop-in replacement for Play Framework's [Twirl template language](https://github.com/playframework/twirlhttps://github.com/playframework/twirl).
 Twirl is good for simple view templates because for simple pages, the HTML structure is left mostly intact.
 For more complex pages, `PFView` is:
