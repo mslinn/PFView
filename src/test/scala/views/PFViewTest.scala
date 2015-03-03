@@ -53,6 +53,14 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
     ++("simple")
   }
 
+  def includeFile = new PFView {
+    includeFile("blah.html", "src/test/resources/public")
+  }
+
+  def includeFileNoType = new PFView {
+    includeFile("blah", "src/test/resources/public")
+  }
+
   def include_en = new PFView {
     implicit val lang = play.api.i18n.Lang("en")
     includeFile("blah.html", "src/test/resources/public")
@@ -94,6 +102,12 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
 
       assert(includeUrl.toString.contains("Pull Requests"))
       assert(includeUrl.toString.contains("Pull Requests"))
+
+      assert(includeFile.toString=="This is the generic version of blah.html\n")
+      assert(includeFile.toString=="This is the generic version of blah.html\n")
+
+      assert(includeFileNoType.toString=="This is the content of blah\n")
+      assert(includeFileNoType.toString=="This is the content of blah\n")
 
       assert(includeMissing.toString=="This is the generic version of blah.html\n")
       assert(includeMissing.toString=="This is the generic version of blah.html\n")
