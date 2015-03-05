@@ -13,10 +13,10 @@ javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
 scalacOptions ++= Seq("-deprecation", "-encoding", "UTF-8", "-feature", "-target:jvm-1.7", "-unchecked",
     "-Ywarn-adapted-args", "-Ywarn-value-discard", "-Xlint")
 
-scalaVersion := "2.10.4"
-//scalaVersion := "2.11.5"
+scalaVersion := "2.10.5"
+//scalaVersion := "2.11.6"
 
-crossScalaVersions := Seq("2.10.4", "2.11.5")
+crossScalaVersions := Seq("2.10.5", "2.11.6")
 
 libraryDependencies <++= scalaVersion {
   case sv if sv.startsWith("2.11") =>
