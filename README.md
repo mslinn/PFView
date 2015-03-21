@@ -29,7 +29,7 @@ No business logic should exist in a view, however traversing data structures req
 As a result, a non-trivial `Twirl` template becomes an unholy mess that is difficult to maintain.
 
 As well, `Twirl` has an awkward syntax and limited capabilities compared to other view templating languages, such as ASP, JSP, JSP EL, etc.
-PFView is 100% Scala.
+PFView is 100% Scala. It could be made to work to with Play for Java projects, but no work has been done to document how to do this.
 
 When Adobe Flex was popular, it was common to initially write view templates in [MXML](http://en.wikipedia.org/wiki/MXML),
 then rewrite them in [ActionScript](http://en.wikipedia.org/wiki/ActionScript) as complexity increased.
