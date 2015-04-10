@@ -46,7 +46,7 @@ Add two lines to `build.sbt`.
 
  * Add this to the `resolvers`:
 ````
-"micronautics/play on bintray" on "http://dl.bintray.com/micronautics/play"
+"micronautics/play on bintray" at "http://dl.bintray.com/micronautics/play"
 ````
 
 This library has been built against Scala 2.10.4 / Play 2.2.6 and Scala 2.11.5 / Play 2.3.7.
