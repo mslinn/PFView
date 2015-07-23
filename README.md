@@ -49,7 +49,7 @@ Add two lines to `build.sbt`.
 "micronautics/play on bintray" at "http://dl.bintray.com/micronautics/play"
 ````
 
-This library has been built against Scala 2.10.4 / Play 2.2.6 and Scala 2.11.5 / Play 2.3.7.
+This library has been built against Scala 2.10.5 / Play 2.2.6 and Scala 2.11.7 / Play 2.4.2.
 
 ## Working with PFView ##
 ### Creating an Instance ###
