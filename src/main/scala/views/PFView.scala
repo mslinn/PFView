@@ -1,10 +1,11 @@
 package views
 
 import play.api.i18n.Lang
-import play.api.templates.Html
+import play.twirl.api._
 import scala.language.implicitConversions
 import java.io.File
-
+import play.api.Play
+import play.api.Play.current
 
 object PFView {
   def apply(block: => Any): String = {
@@ -21,7 +22,7 @@ trait PFViewImplicits {
 
   implicit def sbToString(sb: StringBuilder): String = sb.toString()
 
-  implicit def appendableToString(appendable: play.api.templates.HtmlFormat.Appendable): String = appendable.toString()
+  implicit def appendableToString(appendable: HtmlFormat.Appendable): String = appendable.toString()
 
   //implicit def htmlToString(html: Html): String = html.toString()
 
@@ -37,79 +38,74 @@ trait PFView extends PFViewImplicits {
   // TODO incorporate https://gist.github.com/javierfs89/eca13fa3429af26b9ac9
   @inline def ++(s: => String=""): StringBuilder = sb.append(s)
 
-  /** Include a local file if it exists; cache results for relative filePaths.
-    * Side effect: appends contents of file to PFView's StringBuffer.
-    * @param filePath
-    * @param baseDir can be relative or absolute. Default is to look in the Play app's `public` directory */
+  /** @return Some(File) for local file if it exists; cache results for relative filePaths.
+    * @param baseDir directory to look for file; can be relative or absolute. Default is to look in the Play app's `public` directory */
   def includeFile(filePath: String, baseDir: String = "public", memoize: Boolean=true): StringBuilder = {
-
-    @inline val doIt: String => StringBuilder = (path: String) =>
-      includeFileFn(path) { case (fileName, fileType) =>
-        import play.api.Play
-        import play.api.Play.current
-
-        Play.getExistingFile(s"$baseDir${File.separator}$fileName$fileType")
-      }
-
-    val memoizedDoIt = Memoize(doIt)
-    val path: String = s"$baseDir${File.separator}$filePath"
-    if (filePath.startsWith(File.separator) || !memoize) doIt(path) else memoizedDoIt(path)
+    val path: String = if (baseDir.isEmpty) filePath else {
+      if (filePath.startsWith(File.separator)) s"$baseDir$filePath" else s"$baseDir${ File.separator }$filePath"
+    }
+    includePath(path) { case (fileName, fileType) => import play.api.Play
+      import play.api.Play.current
+      Play.getExistingFile(s"$fileName$fileType")
+    }
   }
 
-  /** Include a local file, using a localized version if it exists.
+  /** @return contents of localized File */
+  @inline def _localizedFile(lang: Lang): ((String, String)) => StringBuilder = tuple2 => {
+    val (filePath: String, baseDir: String) = tuple2
+    includePath(s"$baseDir${ File.separator }$filePath") { case (fileName, fileType) =>
+      val l10n = "_" + lang.language
+      val l10nCountry =
+        if (lang.country.nonEmpty) "_" + lang.language + "-" + lang.country else l10n
+
+      // Retrieve the File for the current language & country, or just the generic language version, or just the originally specified version
+      val file = Play.getExistingFile( s"$fileName$l10nCountry$fileType")
+          .orElse(Play.getExistingFile(s"$fileName$l10n$fileType"))
+          .orElse(Play.getExistingFile(s"$filePath"))
+      file
+    }
+  }
+
+  /** @return contents of localized File */
+  private def memoizedLocalizedFile(lang: Lang) = Memoize(_localizedFile(lang))
+
+  /** @return File for a local file, or a localized version if it exists.
     * For example, specify `filePath` `blah.html` and `lang` `en-US` to search for `blah_en-US.html` with a fallback to `blah_en.html` and then `blah.html`.
     * Side effect: appends contents of file to PFView's StringBuffer.
     * @param filePath can be a generic i18n path.
     * @param baseDir Default is to look in the Play app's `public` directory
     * @param lang Language to consider for filePath l10n; does not need to contain a country code */
-  def includeLocalizedFile(filePath: String, baseDir: String = "public", memoize: Boolean=true)(implicit lang: Lang=Lang("en")): StringBuilder = {
-    @inline val doIt: ((String, String)) => StringBuilder = tuple2 => {
-      val (filePath: String, baseDir: String) = tuple2
-      includeFileFn(s"$baseDir${File.separator}$filePath") { case (fileName, fileType) =>
-        import play.api.Play
-        import play.api.Play.current
-
-        val l10n = "_" + lang.language
-
-        val l10nCountry =
-          if (lang.country.nonEmpty) "_" + lang.language + "-" + lang.country else l10n
-
-        // Retrieve the file with the current language & country, or just the generic language version, or just the originally specified version
-        Play.getExistingFile(            s"$baseDir/$fileName$l10nCountry$fileType")
-            .orElse(Play.getExistingFile(s"$baseDir/$fileName$l10n$fileType"))
-            .orElse(Play.getExistingFile(s"$baseDir/$filePath"))
-      }
-    }
-
-    val memoizedDoIt = Memoize(doIt)
-    if (filePath.startsWith(File.separator) || !memoize) doIt((filePath, baseDir)) else memoizedDoIt((filePath, baseDir))
+  def localizedFile(filePath: String, baseDir: String = "public", memoize: Boolean=true)(implicit lang: Lang=Lang("en")): StringBuilder = {
+    if (filePath.startsWith(File.separator) || !memoize) _localizedFile(lang)((filePath, baseDir))
+    else memoizedLocalizedFile(lang)((filePath, baseDir))
   }
 
   /** Include a local file if it exists. File contents are memoized if file is local.
     * Side effect: appends contents of file to PFView's StringBuffer.
     * @param path can be a generic i18n path, either absolute or relative.
-    * @param fn Function2 accepts (fileName, fileType) => Option[File]; performs whatever magic is required */
-  def includeFileFn(path: String)(fn: ((String, String)) => Option[File]): StringBuilder = {
+    * @param pathNameToMaybeFile Function2 accepts (pathAndName, fileType) => Option[File]; performs whatever magic is required */
+  def includePath(path: String)(pathNameToMaybeFile: ((String, String)) => Option[File]): StringBuilder = {
     val lastDotIndex = path.lastIndexOf(".")
-    val nameType: (String, String) = if (lastDotIndex>=0) path.splitAt(lastDotIndex) else (path, "")
-    val maybeFile: Option[File] = fn(nameType)
 
-    val result = maybeFile.map { file: File =>
-      import scala.io.Source.fromFile
+    /** @return tuple containing path/filename and filetype */
+    val nameType: (String, String) = if (lastDotIndex>=0) path.splitAt(lastDotIndex) else (path, "")
+
+    val result = pathNameToMaybeFile(nameType).map { file: File =>
       val file2 = if (file.isDirectory) new File(file, "index.html") else file
-      val content = fromFile(file2).mkString
+      val content = scala.io.Source.fromFile(file2).mkString
       content
-    }.getOrElse(s"""PFVIew file failed to include '$path'""")
+    }.getOrElse(s"""PFView file failed to include '$path'""")
 
     sb.append(result)
   }
 
   /** Include the contents of a URL; relative URLs are not supported.
+    *
     * @param url String representation of URL to fetch
     * @param encoding defaults to UTF-8 */
   def includeUrl(url: String, encoding: String="UTF-8"): StringBuilder =
     sb.append(try {
-      io.Source.fromURL(url, encoding: String).mkString
+      scala.io.Source.fromURL(url, encoding: String).mkString
     } catch {
       case e: Exception =>
         s"""PFVIew URL include failed; ${e.getClass.getName}: ${e.getMessage} for $url with encoding $encoding"""

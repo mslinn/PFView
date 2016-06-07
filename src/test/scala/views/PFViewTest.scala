@@ -63,12 +63,12 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
 
   def include_en = new PFView {
     implicit val lang = play.api.i18n.Lang("en")
-    includeFile("blah.html", "src/test/resources/public")
+    localizedFile("blah.html", "src/test/resources/public")
   }
 
   def `include_en-US` = new PFView {
     implicit val lang = play.api.i18n.Lang("en-US")
-    includeFile("blah.html", "src/test/resources/public")
+    localizedFile("blah.html", "src/test/resources/public")
   }
 
   def includeMissing = new PFView {
@@ -83,39 +83,28 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
   "PFView" should {
     "work" in {  // repeat tests to ensure buffer is initialized properly
       assert(nada.toString=="")
-      assert(nada.toString=="")
 
       assert(emptyView.toString=="")
-      assert(emptyView.toString=="")
 
-      assert(staticView.toString=="static view")
       assert(staticView.toString=="static view")
 
       assert(dynamicView("good").toString=="Feeling good? Gotta go!")
       assert(dynamicView("bad").toString=="Feeling bad? Gotta go!")
 
       assert(nestedViews("x").toString=="xx")
-      assert(nestedViews("x").toString=="xx")
 
       assert(simple.toString=="simple")
-      assert(simple.toString=="simple")
 
-      assert(includeUrl.toString.contains("Pull Requests"))
-      assert(includeUrl.toString.contains("Pull Requests"))
+      assert(includeUrl.toString.toLowerCase.contains("pull requests"))
 
-      assert(includeFile.toString=="This is the generic version of blah.html\n")
       assert(includeFile.toString=="This is the generic version of blah.html\n")
 
       assert(includeFileNoType.toString=="This is the content of blah\n")
-      assert(includeFileNoType.toString=="This is the content of blah\n")
 
-      assert(includeMissing.toString=="This is the generic version of blah.html\n")
       assert(includeMissing.toString=="This is the generic version of blah.html\n")
 
       assert(include_en.toString=="This is the en version of blah.html\n")
-      assert(include_en.toString=="This is the en version of blah.html\n")
 
-      assert(`include_en-US`.toString=="This is the en-US version of blah.html\n")
       assert(`include_en-US`.toString=="This is the en-US version of blah.html\n")
     }
   }

@@ -1,28 +1,30 @@
-import bintray.Keys._
+import sbt.Keys._
 
 name := """PFView"""
 
-version := "0.0.3"
+version := "0.0.4"
 
 organization := "com.micronautics"
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
-javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 scalacOptions ++= Seq("-deprecation", "-encoding", "UTF-8", "-feature", "-target:jvm-1.7", "-unchecked",
     "-Ywarn-adapted-args", "-Ywarn-value-discard", "-Xlint")
 
-scalaVersion := "2.10.6"
-//scalaVersion := "2.11.8"
+//scalaVersion := "2.10.6"
+scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8")
+crossScalaVersions := Seq(/*"2.10.6", */"2.11.8")
 
 libraryDependencies <++= scalaVersion {
   case sv if sv.startsWith("2.11") =>
     Seq(
-      "com.typesafe.play" %% "play"      % "2.3.8" % "provided",
-      "org.scalatestplus" %% "play"      % "1.2.0" % "test"
+      "com.typesafe.play"      %% "play"               % "2.5.3" % "provided",
+      "com.typesafe.play"      %% "play-logback"       % "2.5.3" % "provided",
+      "com.typesafe.play"      %% "twirl-api"          % "1.1.1" % "provided",
+      "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0" % "test"
     )
 
   case sv if sv.startsWith("2.10") =>
@@ -31,10 +33,9 @@ libraryDependencies <++= scalaVersion {
       "org.scalatestplus" %% "play"      % "1.0.0" % "test"
     )
 }
-bintrayPublishSettings
-bintrayOrganization in bintray := Some("micronautics")
-repository in bintray := "play"
 
+bintrayOrganization := Some("micronautics")
+bintrayRepository := "play"
 publishArtifact in Test := false
 
 com.typesafe.sbt.SbtGit.versionWithGit
