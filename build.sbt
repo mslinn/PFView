@@ -2,7 +2,7 @@ import sbt.Keys._
 
 name := "PFView"
 
-version := "0.0.4"
+version := "0.0.5"
 
 organization := "com.micronautics"
 

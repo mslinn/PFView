@@ -41,7 +41,7 @@ Add two lines to `build.sbt`.
 
  * Add the `pfview` dependency:
 ````
-"com.micronautics" %% "pfview" % "0.0.4" withSources()
+"com.micronautics" %% "pfview" % "0.0.5" withSources()
 ````
 
  * Add this to the `resolvers`:
