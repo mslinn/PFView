@@ -68,6 +68,7 @@ libraryDependencies ++= scalaVersion {
 
 bintrayOrganization := Some("micronautics")
 bintrayRepository := "play"
+publishArtifact in Test := false
 
 publishArtifact in Test := false
 

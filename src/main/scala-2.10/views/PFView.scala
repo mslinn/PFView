@@ -110,11 +110,12 @@ trait PFView extends PFViewImplicits {
   }
 
   /** Include the contents of a URL; relative URLs are not supported.
+    *
     * @param url String representation of URL to fetch
     * @param encoding defaults to UTF-8 */
   def includeUrl(url: String, encoding: String="UTF-8"): StringBuilder =
     sb.append(try {
-      io.Source.fromURL(url, encoding: String).mkString
+      scala.io.Source.fromURL(url, encoding: String).mkString
     } catch {
       case e: Exception =>
         s"""PFVIew URL include failed; ${ e.getClass.getName }: ${ e.getMessage } for $url with encoding $encoding"""
