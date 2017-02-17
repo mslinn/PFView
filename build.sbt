@@ -1,59 +1,82 @@
-import bintray.Keys._
+import sbt.Keys._
 
-name := """PFView"""
+name := "PFView"
 
-version := "0.0.3"
+version := "0.0.4"
 
 organization := "com.micronautics"
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
-javacOptions ++= Seq("-source", "1.7", "-target", "1.7")
+javacOptions ++= Seq(
+  "-Xlint:deprecation",
+  "-Xlint:unchecked",
+  "-source", "1.8",
+  "-target", "1.8",
+  "-g:vars"
+)
 
-scalacOptions ++= Seq("-deprecation", "-encoding", "UTF-8", "-feature", "-target:jvm-1.7", "-unchecked",
-    "-Ywarn-adapted-args", "-Ywarn-value-discard", "-Xlint")
+scalacOptions ++= (
+  scalaVersion {
+    case sv if sv.startsWith("2.10") => Nil
+    case _ => List(
+      "-target:jvm-1.8",
+      "-Ywarn-unused"
+    )
+  }.value ++ Seq(
+    "-deprecation",
+    "-encoding", "UTF-8",
+    "-feature",
+    "-unchecked",
+    "-Ywarn-adapted-args",
+    "-Ywarn-dead-code",
+    "-Ywarn-numeric-widen",
+    "-Ywarn-value-discard",
+    "-Xfuture",
+    "-Xlint"
+  )
+)
 
-scalaVersion := "2.10.5"
-//scalaVersion := "2.11.6"
+scalaVersion := "2.12.1"
 
-crossScalaVersions := Seq("2.10.5", "2.11.6")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 
-libraryDependencies <++= scalaVersion {
+resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
+
+libraryDependencies ++= Seq(
+  "com.micronautics" %% "scalacourses-utils" % "0.2.20" withSources(),
+  "ch.qos.logback"   %  "logback-classic"    % "1.2.1" % Test withSources()
+)
+libraryDependencies ++= scalaVersion {
+  case sv if sv.startsWith("2.12") =>
+    Seq(
+      "com.typesafe.play"      %% "play"               % "2.6.0-M1" % Provided,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M2" % Test
+    )
   case sv if sv.startsWith("2.11") =>
     Seq(
-      "com.typesafe.play" %% "play"      % "2.3.8" % "provided",
-      "org.scalatestplus" %% "play"      % "1.2.0" % "test"
+      "com.typesafe.play"      %% "play"               % "2.5.12" % Provided,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1"  % Test
     )
 
   case sv if sv.startsWith("2.10") =>
     Seq(
-      "com.typesafe.play" %% "play"      % "2.2.6" % "provided",
-      "org.scalatestplus" %% "play"      % "1.0.0" % "test"
+      "com.typesafe.play" %% "play" % "2.2.6" % Provided,
+      "org.scalatestplus" %% "play" % "1.0.0" % Test
     )
-}
-bintrayPublishSettings
-bintrayOrganization in bintray := Some("micronautics")
-repository in bintray := "play"
+}.value
+
+bintrayOrganization := Some("micronautics")
+bintrayRepository := "play"
 
 publishArtifact in Test := false
 
-com.typesafe.sbt.SbtGit.versionWithGit
-
 // define the statements initially evaluated when entering 'console', 'console-quick' but not 'console-project'
-initialCommands in console := """ // make app resources accessible
-   |Thread.currentThread.setContextClassLoader(getClass.getClassLoader)
-   |new play.core.StaticApplication(new java.io.File("."))
-   |
-   |//import play.api.{ DefaultApplication, Mode, Play }
-   |//val applicationPath = new java.io.File(".")
-   |//val classLoader = this.getClass.getClassLoader
-   |//val sources = None
-   |//val applicationMode = Mode.Dev
-   |//Play.start(new DefaultApplication(applicationPath, classLoader, sources, applicationMode))
-   |
-   |import java.net.URL
-   |import java.text.DateFormat
-   |import java.util.Locale
-   |import play.api.Play.current
-   |import play.Logger
-   |""".stripMargin
+initialCommands in console := """
+                                |
+                                |import java.net.URL
+                                |import java.text.DateFormat
+                                |import java.util.Locale
+                                |import play.api.Play.current
+                                |import play.Logger
+                                |""".stripMargin

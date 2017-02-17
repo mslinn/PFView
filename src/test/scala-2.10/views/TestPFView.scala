@@ -1,18 +1,22 @@
 package views
 
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
+import org.junit.runner.RunWith
+import org.scalatest.Matchers._
+import org.scalatest._
+import org.scalatest.junit.JUnitRunner
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.test.FakeApplication
 import scala.language.implicitConversions
 
-class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter with OneAppPerSuite {
+@RunWith(classOf[JUnitRunner])
+class TestPFView extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter with OneAppPerSuite {
   implicit override lazy val app: FakeApplication = FakeApplication()
 
   def dump(expected: String, actual: String): Boolean = {
     val isEqual: Boolean = expected == actual
     if (!isEqual) {
       print("          ")
-      (0 to math.max(expected.length, actual.length)/10) foreach { i => print(s"${i%10}....|....") }
+      (0 to math.max(expected.length, actual.length)/10) foreach { i => print(s"${ i%10 }....|....") }
       println()
       println(s"Expected: $expected")
       println(s"Actual:   $actual")
@@ -20,7 +24,7 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
     isEqual
   }
 
-  object nada extends PFView { }
+  object nada extends PFView
 
   object emptyView extends PFView {
     ++()
@@ -44,7 +48,7 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
         ++(msg * 2)
       }.toString
 
-      val repeatedContent = repeatContent(msg)
+      val repeatedContent: String = repeatContent(msg)
       ++(repeatedContent)
     }
   }
@@ -82,41 +86,42 @@ class PFViewTest extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
 
   "PFView" should {
     "work" in {  // repeat tests to ensure buffer is initialized properly
-      assert(nada.toString=="")
-      assert(nada.toString=="")
+      nada.toString === ""
+      nada.toString === ""
 
-      assert(emptyView.toString=="")
-      assert(emptyView.toString=="")
+      emptyView.toString === ""
+      emptyView.toString === ""
 
-      assert(staticView.toString=="static view")
-      assert(staticView.toString=="static view")
+      staticView.toString === "static view"
+      staticView.toString === "static view"
 
-      assert(dynamicView("good").toString=="Feeling good? Gotta go!")
-      assert(dynamicView("bad").toString=="Feeling bad? Gotta go!")
+      dynamicView("good").toString === "Feeling good? Gotta go!"
+      dynamicView("bad").toString === "Feeling bad? Gotta go!"
 
-      assert(nestedViews("x").toString=="xx")
-      assert(nestedViews("x").toString=="xx")
+      nestedViews("x").toString === "xx"
+      nestedViews("x").toString === "xx"
 
-      assert(simple.toString=="simple")
-      assert(simple.toString=="simple")
+      simple.toString === "simple"
+      simple.toString === "simple"
 
-      assert(includeUrl.toString.contains("Pull Requests"))
-      assert(includeUrl.toString.contains("Pull Requests"))
+      includeUrl.toString.toLowerCase should include("pull requests")
+      includeUrl.toString.toLowerCase should include("pull requests")
 
-      assert(includeFile.toString=="This is the generic version of blah.html\n")
-      assert(includeFile.toString=="This is the generic version of blah.html\n")
+      includeFile.toString === "This is the generic version of blah.html\n"
+      includeFile.toString === "This is the generic version of blah.html\n"
 
-      assert(includeFileNoType.toString=="This is the content of blah\n")
-      assert(includeFileNoType.toString=="This is the content of blah\n")
+      includeFileNoType.toString === "This is the content of blah\n"
+      includeFileNoType.toString === "This is the content of blah\n"
 
-      assert(includeMissing.toString=="This is the generic version of blah.html\n")
-      assert(includeMissing.toString=="This is the generic version of blah.html\n")
+      includeMissing.toString === "This is the generic version of blah.html\n"
+      includeMissing.toString === "This is the generic version of blah.html\n"
 
-      assert(include_en.toString=="This is the en version of blah.html\n")
-      assert(include_en.toString=="This is the en version of blah.html\n")
+      include_en.toString === "This is the en version of blah.html\n"
+      include_en.toString === "This is the en version of blah.html\n"
 
-      assert(`include_en-US`.toString=="This is the en-US version of blah.html\n")
-      assert(`include_en-US`.toString=="This is the en-US version of blah.html\n")
+      `include_en-US`.toString === "This is the en-US version of blah.html\n"
+      `include_en-US`.toString === "This is the en-US version of blah.html\n"
+      ()
     }
   }
 }

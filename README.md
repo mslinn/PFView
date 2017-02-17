@@ -41,7 +41,7 @@ Add two lines to `build.sbt`.
 
  * Add the `pfview` dependency:
 ````
-"com.micronautics" %% "pfview" % "0.0.3" withSources()
+"com.micronautics" %% "pfview" % "0.0.4" withSources()
 ````
 
  * Add this to the `resolvers`:
@@ -49,7 +49,7 @@ Add two lines to `build.sbt`.
 "micronautics/play on bintray" at "http://dl.bintray.com/micronautics/play"
 ````
 
-This library has been built against Scala 2.10.5 / Play 2.2.6 and Scala 2.11.7 / Play 2.4.2.
+This library has been built against Scala 2.12.1 / Play 2.6.0-M1, Scala 2.11.8 / Play 2.5.12 and Scala 2.10.6 / Play 2.2.6.
 
 ## Working with PFView ##
 ### Creating an Instance ###
