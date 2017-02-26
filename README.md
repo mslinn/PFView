@@ -1,5 +1,7 @@
 ![PFView logo](https://raw.githubusercontent.com/mslinn/PFView/master/images/pfview_355x148.png "PFView Logo")
 
+[ ![Download](https://api.bintray.com/packages/micronautics/play/pfview/images/download.svg) ](https://bintray.com/micronautics/play/pfview/_latestVersion)
+
 This project is sponsored by [Micronautics Research Corporation](http://www.micronauticsresearch.com/),
 the company that delivers online Scala and Play training via [ScalaCourses.com](http://www.ScalaCourses.com).
 You can learn exactly how this project works by taking the [Introduction to Scala](http://www.ScalaCourses.com/showCourse/40),

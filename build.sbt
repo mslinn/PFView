@@ -18,7 +18,9 @@ javacOptions ++= Seq(
 
 scalacOptions ++= (
   scalaVersion {
-    case sv if sv.startsWith("2.10") => Nil
+    case sv if sv.startsWith("2.10") => List(
+      "-target:jvm-1.7"
+    )
     case _ => List(
       "-target:jvm-1.8",
       "-Ywarn-unused"
@@ -44,8 +46,9 @@ crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
 
 libraryDependencies ++= Seq(
-  "com.micronautics" %% "scalacourses-utils" % "0.2.20" withSources(),
-  "ch.qos.logback"   %  "logback-classic"    % "1.2.1" % Test withSources()
+  "ch.qos.logback"           %  "logback-classic"    % "1.2.1"  % Test withSources(),
+  "com.micronautics"         %% "scalacourses-utils" % "0.2.20" withSources(),
+  "com.google.code.findbugs" %  "jsr305"             % "3.0.1"  withSources() force()
 )
 libraryDependencies ++= scalaVersion {
   case sv if sv.startsWith("2.12") =>
@@ -73,9 +76,7 @@ publishArtifact in Test := false
 publishArtifact in Test := false
 
 // define the statements initially evaluated when entering 'console', 'console-quick' but not 'console-project'
-initialCommands in console := """
-                                |
-                                |import java.net.URL
+initialCommands in console := """import java.net.URL
                                 |import java.text.DateFormat
                                 |import java.util.Locale
                                 |import play.api.Play.current
