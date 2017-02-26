@@ -1,5 +1,6 @@
 ![PFView logo](https://raw.githubusercontent.com/mslinn/PFView/master/images/pfview_355x148.png "PFView Logo")
 
+[![Build Status](https://travis-ci.org/mslinn/PFView.svg?branch=master)](https://travis-ci.org/mslinn/PFView)
 [ ![Download](https://api.bintray.com/packages/micronautics/play/pfview/images/download.svg) ](https://bintray.com/micronautics/play/pfview/_latestVersion)
 
 This project is sponsored by [Micronautics Research Corporation](http://www.micronauticsresearch.com/),
