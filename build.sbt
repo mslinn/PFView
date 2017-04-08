@@ -2,7 +2,7 @@ import sbt.Keys._
 
 name := "PFView"
 
-version := "0.0.5"
+version := "0.0.6"
 
 organization := "com.micronautics"
 
@@ -48,18 +48,18 @@ resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronaut
 libraryDependencies ++= Seq(
   "ch.qos.logback"           %  "logback-classic"    % "1.2.1"  % Test withSources(),
   "com.micronautics"         %% "scalacourses-utils" % "0.2.20" withSources(),
-  "com.google.code.findbugs" %  "jsr305"             % "3.0.1"  withSources() force()
+  "com.google.code.findbugs" %  "jsr305"             % "3.0.2"  withSources() force()
 )
 libraryDependencies ++= scalaVersion {
   case sv if sv.startsWith("2.12") =>
     Seq(
-      "com.typesafe.play"      %% "play"               % "2.6.0-M1" % Provided,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M2" % Test
+      "com.typesafe.play"      %% "play"               % "2.6.0-M3" % Provided,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0-M2" % Test
     )
   case sv if sv.startsWith("2.11") =>
     Seq(
-      "com.typesafe.play"      %% "play"               % "2.5.12" % Provided,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1"  % Test
+      "com.typesafe.play"      %% "play"               % "2.5.14" % Provided,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0"  % Test
     )
 
   case sv if sv.startsWith("2.10") =>

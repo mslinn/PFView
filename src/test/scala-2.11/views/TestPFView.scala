@@ -12,7 +12,7 @@ import scala.language.implicitConversions
 @RunWith(classOf[JUnitRunner])
 class TestPFView extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter with OneAppPerSuite {
   val guiceApplicationBuilder = new GuiceApplicationBuilder()
-  val environment: Environment = guiceApplicationBuilder.environment
+  implicit val environment: Environment = guiceApplicationBuilder.environment
   override implicit lazy val app: Application = guiceApplicationBuilder.build()
 
   def dump(expected: String, actual: String): Boolean = {
@@ -27,32 +27,26 @@ class TestPFView extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
     isEqual
   }
 
-  object nada extends PFView {
-    implicit val env: Environment = environment
-  }
+  object nada extends PFView()
 
-  object emptyView extends PFView {
-    implicit val env: Environment = environment
+  object emptyView extends PFView() {
     ++()
   }
 
-  object staticView extends PFView {
-    implicit val env: Environment = environment
+  object staticView extends PFView() {
     ++("static")
     ++(" view")
   }
 
   object dynamicView {
-    def apply(suffix: String) = new PFView {
-      implicit val env: Environment = environment
+    def apply(suffix: String) = new PFView() {
       ++(s"Feeling $suffix?")
       ++(" Gotta go!")
     }
   }
 
   object nestedViews {
-    def apply(msg: String="") = new PFView {
-      implicit val env: Environment = environment
+    def apply(msg: String="") = new PFView() {
       def repeatContent(msg: String): String = new PFView {
         implicit val env: Environment = environment
         ++(msg * 2)
@@ -63,41 +57,34 @@ class TestPFView extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter wit
     }
   }
 
-  def simple = new PFView {
-    implicit val env: Environment = environment
+  def simple = new PFView() {
     ++("simple")
   }
 
-  def includeFile = new PFView {
-    implicit val env: Environment = environment
+  def includeFile = new PFView() {
     includeFile("blah.html", "src/test/resources/public")
   }
 
-  def includeFileNoType = new PFView {
-    implicit val env: Environment = environment
+  def includeFileNoType = new PFView() {
     includeFile("blah", "src/test/resources/public")
   }
 
-  def include_en = new PFView {
-    implicit val env: Environment = environment
+  def include_en = new PFView() {
     implicit val lang = play.api.i18n.Lang("en")
     includeFile("blah.html", "src/test/resources/public")
   }
 
-  def `include_en-US` = new PFView {
-    implicit val env: Environment = environment
+  def `include_en-US` = new PFView() {
     implicit val lang = play.api.i18n.Lang("en-US")
     includeFile("blah.html", "src/test/resources/public")
   }
 
-  def includeMissing = new PFView {
-    implicit val env: Environment = environment
+  def includeMissing = new PFView() {
     implicit val lang = play.api.i18n.Lang("fr")
     includeFile("blah.html", "src/test/resources/public")
   }
 
-  def includeUrl = new PFView {
-    implicit val env: Environment = environment
+  def includeUrl = new PFView() {
     includeUrl("https://github.com/mslinn/PFView")
   }
 

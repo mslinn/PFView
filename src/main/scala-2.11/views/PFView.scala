@@ -24,17 +24,14 @@ trait PFViewImplicits {
 }
 
 object PFView {
-  def apply(block: => Any)(implicit environment: Environment): String = {
-    val pfView = new PFView{
-      val env: Environment = environment
-    }
+  def apply(block: => Any)(implicit env: Environment): String = {
+    val pfView = new PFView()
     pfView.++(block.toString)
     pfView.toString()
   }
 }
 
-trait PFView extends PFViewImplicits {
-  val env: Environment
+class PFView(implicit env: Environment) extends PFViewImplicits {
   implicit val sb = new StringBuilder("")
 
   /** Side effect: appends contents of String to PFView's StringBuffer. */

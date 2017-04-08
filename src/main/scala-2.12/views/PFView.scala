@@ -24,17 +24,14 @@ trait PFViewImplicits {
 }
 
 object PFView {
-  def apply(block: => Any)(implicit environment: Environment): String = {
-    val pfView = new PFView{
-      val env: Environment = environment
-    }
+  def apply(block: => Any)(implicit env: Environment): String = {
+    val pfView = new PFView()
     pfView.++(block.toString)
     pfView.toString()
   }
 }
 
-trait PFView extends PFViewImplicits {
-  val env: Environment
+class PFView(implicit env: Environment) extends PFViewImplicits {
   implicit val sb = new StringBuilder("")
 
   /** Side effect: appends contents of String to PFView's StringBuffer. */
@@ -51,7 +48,6 @@ trait PFView extends PFViewImplicits {
 
   /** Include a local file if it exists; cache results for relative filePaths.
     * Side effect: appends contents of file to PFView's StringBuffer.
-    * @param filePath
     * @param baseDir can be relative or absolute. Default is to look in the Play app's `public` directory */
   def includeFile(filePath: String, baseDir: String = "public", memoize: Boolean=true): String = {
     val path: String = s"$baseDir${ File.separator }$filePath"

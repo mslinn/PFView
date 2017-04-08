@@ -22,9 +22,9 @@ For more complex pages, `PFView` is:
 The job of a view is to work with data passed from a controller, as well as global state, and render output.
 No business logic should exist in a view, however traversing data structures requires an expressive computing language.
 
-`PFView` was created to overcome `Twirl`'s shortcomings:
- * Generates Scala code which is an unreadable mess, which is horrible to debug
- * Cannot be refactored by any available IDE
+`PFView` was created to overcome `Twirl`'s shortcomings. Twirl:
+ * Generates Scala code which is an unreadable mess, and is horrible to debug
+ * Cannot be refactored by an IDE
  * Components must be stored in separate files, instead of merely defining a class or method
  * DSL is less expressive than Scala, and is not a successful functional language.
  * All of a web page's contents are created dynamically; no portion can be designated as being immutable
@@ -44,7 +44,7 @@ Add two lines to `build.sbt`.
 
  * Add the `pfview` dependency:
 ````
-"com.micronautics" %% "pfview" % "0.0.5" withSources()
+"com.micronautics" %% "pfview" % "0.0.6" withSources()
 ````
 
  * Add this to the `resolvers`:
@@ -52,7 +52,7 @@ Add two lines to `build.sbt`.
 "micronautics/play on bintray" at "http://dl.bintray.com/micronautics/play"
 ````
 
-This library has been built against Scala 2.12.1 / Play 2.6.0-M1, Scala 2.11.8 / Play 2.5.12 and Scala 2.10.6 / Play 2.2.6.
+This library has been built against Scala 2.12.1 / Play 2.6.0-M3, Scala 2.11.8 / Play 2.5.14 and Scala 2.10.6 / Play 2.2.6.
 
 ## Working with PFView ##
 ### Creating an Instance ###
@@ -62,11 +62,15 @@ That's all there is to it!
 
 There are several ways of creating `PFView` instances. Examples of all of these are provided in the unit tests.
 
- * To define a Twirl-compatible dynamic view, define an `object` that does not extend `PFView`.
-   The `object` needs to define a method called `apply` that returns `Html`.
+ * To define a Twirl-compatible dynamic view, define an injected `class` that accepts an implicit instance of `Environment`.
+   The `PFView` constructor picks up the implicit `Environment` instance.
+   The `class` needs to define a method called `apply` that returns `Html`.
 ````
-object dynamicView {
-  def apply(suffix: String): Html = new PFView {
+import javax.inject.Inject
+import play.api.Environment
+
+class dynamicView @Inject() (implicit env: Environment) {
+  def apply(suffix: String): Html = new PFView() {
     ++(s"Feeling $suffix?")
   }.toHtml
 }
@@ -78,16 +82,19 @@ Of course, `apply` can be defined have as many arguments and argument lists as r
    This is useful for complex, dynamic content.
 
 ````
-def simple = new PFView {
+def simple = new PFView() {
   ++("simple")
 }
 ````
 
 * `PFView` instances can be recursively nested:
 ````
-object nestedViews {
-  def apply(msg: String="") = new PFView {
-    def repeatContent(msg: String): String = new PFView {
+import javax.inject.Inject
+import play.api.Environment
+
+class nestedViews @Inject() (implicit env: Environment) {
+  def apply(msg: String="") = new PFView() {
+    def repeatContent(msg: String): String = new PFView() {
       ++(msg * 2)
     }.toString
 
@@ -97,9 +104,10 @@ object nestedViews {
 }
 ````
 
- * To define a static view, define an `object` that extends `PFView`. This should only be done when assigning the result to a lazy val.
+ * To define a static view, define an `object` that extends `PFView`. 
+ This should only be done when assigning the result to a lazy val.
 ````
-object staticView extends PFView {
+object staticView extends PFView() {
     ++("<h1>This is a test</h1>")
     ++{s"""<p>The time is now ${new java.util.Date}
           |This is another line</p>
