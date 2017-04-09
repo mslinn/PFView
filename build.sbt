@@ -52,8 +52,10 @@ libraryDependencies ++= Seq(
 )
 libraryDependencies ++= scalaVersion {
   case sv if sv.startsWith("2.12") =>
+    val playVer = "2.6.0-M4"
     Seq(
-      "com.typesafe.play"      %% "play"               % "2.6.0-M3" % Provided,
+      "com.typesafe.play"      %% "play"               % playVer % Provided,
+//      "com.typesafe.play"      %% "play-crypto"        % playVer % Provided,
       "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0-M2" % Test
     )
   case sv if sv.startsWith("2.11") =>

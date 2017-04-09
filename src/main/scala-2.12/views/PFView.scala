@@ -25,7 +25,7 @@ trait PFViewImplicits {
 
 object PFView {
   def apply(block: => Any)(implicit env: Environment): String = {
-    val pfView = new PFView()
+    val pfView = new PFView()(env)
     pfView.++(block.toString)
     pfView.toString()
   }
