@@ -161,3 +161,6 @@ You can specify an alternative encoding like this:
 ````
 includeUrl("https://raw.githubusercontent.com/mslinn/PFView/master/README.md", "iso-8859-1")
 ````
+
+## Scaladoc
+[Here](http://blog.mslinn.com/PFView/latest/api/views/index.html)

@@ -39,11 +39,9 @@ scalacOptions ++= (
   )
 )
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.2"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
-
-resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
+crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
 
 libraryDependencies ++= Seq(
   "ch.qos.logback"           %  "logback-classic"    % "1.2.1"  % Test withSources(),
@@ -70,12 +68,6 @@ libraryDependencies ++= scalaVersion {
       "org.scalatestplus" %% "play" % "1.0.0" % Test
     )
 }.value
-
-bintrayOrganization := Some("micronautics")
-bintrayRepository := "play"
-publishArtifact in Test := false
-
-publishArtifact in Test := false
 
 // define the statements initially evaluated when entering 'console', 'console-quick' but not 'console-project'
 initialCommands in console := """import java.net.URL
