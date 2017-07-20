@@ -1,11 +1,11 @@
 package views
 
+import java.io.File
 import com.micronautics.cache._
+import play.api.Environment
 import play.api.i18n.Lang
 import play.twirl.api._
 import scala.language.implicitConversions
-import java.io.File
-import play.api.Environment
 
 trait PFViewImplicits {
   implicit def pfViewToHtml(pfView: PFView): String = Html(pfView.toString())

@@ -1,16 +1,10 @@
 package views
 
-import org.junit.runner.RunWith
-import org.scalatest.Matchers._
-import org.scalatest._
-import org.scalatest.junit.JUnitRunner
-import org.scalatestplus.play._
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.{Application, Environment}
 import scala.language.implicitConversions
 
 @RunWith(classOf[JUnitRunner])
-class TestPFView extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter with OneAppPerSuite {
+class TestPFView extends PlaySpec with BeforeAndAfterAll with BeforeAndAfter with GuiceOneAppPerSuite {
   val guiceApplicationBuilder = new GuiceApplicationBuilder()
   override implicit lazy val app: Application = guiceApplicationBuilder.build()
 

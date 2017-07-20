@@ -43,6 +43,8 @@ scalaVersion := "2.12.2"
 
 crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
 
+resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
+
 libraryDependencies ++= Seq(
   "ch.qos.logback"           %  "logback-classic"    % "1.2.1"  % Test withSources(),
   "com.micronautics"         %% "scalacourses-utils" % "0.2.20" withSources(),
@@ -54,12 +56,12 @@ libraryDependencies ++= scalaVersion {
     Seq(
       "com.typesafe.play"      %% "play"               % playVer % Provided,
 //      "com.typesafe.play"      %% "play-crypto"        % playVer % Provided,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0-M2" % Test
+      "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % Test
     )
   case sv if sv.startsWith("2.11") =>
     Seq(
       "com.typesafe.play"      %% "play"               % "2.5.16" % Provided,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0"  % Test
+      "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0"  % Test
     )
 
   case sv if sv.startsWith("2.10") =>
