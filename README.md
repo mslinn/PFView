@@ -1,5 +1,6 @@
 ![PFView logo](https://raw.githubusercontent.com/mslinn/PFView/master/images/pfview_355x148.png "PFView Logo")
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build Status](https://travis-ci.org/mslinn/PFView.svg?branch=master)](https://travis-ci.org/mslinn/PFView)
 [ ![Download](https://api.bintray.com/packages/micronautics/play/pfview/images/download.svg) ](https://bintray.com/micronautics/play/pfview/_latestVersion)
 
@@ -109,7 +110,7 @@ class nestedViews @Inject() (env: Environment) {
 }
 ````
 
- 4) To define a static view, define an `object` that extends `PFView`. 
+ 4) To define a static view, define an `object` that extends `PFView`.
  This should only be done when assigning the result to a lazy val.
 ````
 import play.api.Environment
