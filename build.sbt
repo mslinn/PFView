@@ -30,18 +30,13 @@ scalacOptions ++= (
     "-encoding", "UTF-8",
     "-feature",
     "-unchecked",
-    "-Ywarn-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
-    "-Xfuture",
     "-Xlint"
   )
 )
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.9"
 
-crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
+crossScalaVersions := Seq("2.10.6", "2.11.12", "2.12.9", "2.13.0")
 
 resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
 
@@ -51,6 +46,10 @@ libraryDependencies ++= Seq(
   "com.google.code.findbugs" %  "jsr305"             % "3.0.2"  withSources() force()
 )
 libraryDependencies ++= scalaVersion {
+  case sv if sv.startsWith("2.13") =>
+    // todo write me
+    Nil
+    
   case sv if sv.startsWith("2.12") =>
     val playVer = "2.6.2"
     Seq(
