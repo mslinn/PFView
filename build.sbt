@@ -38,7 +38,9 @@ scalaVersion := "2.12.9"
 
 crossScalaVersions := Seq("2.10.6", "2.11.12", "2.12.9", "2.13.0")
 
-resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
+resolvers += "micronautics/scala on bintray" at "https://dl.bintray.com/micronautics/scala"
+
+ThisBuild / turbo := true
 
 libraryDependencies ++= Seq(
   "ch.qos.logback"           %  "logback-classic"    % "1.2.1"  % Test withSources(),
@@ -49,7 +51,7 @@ libraryDependencies ++= scalaVersion {
   case sv if sv.startsWith("2.13") =>
     // todo write me
     Nil
-    
+
   case sv if sv.startsWith("2.12") =>
     val playVer = "2.6.2"
     Seq(
