@@ -6,7 +6,7 @@ version := "0.0.6"
 
 organization := "com.micronautics"
 
-licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+licenses += ("MIT", url("https://opensource.org/licenses/MIT"))
 
 javacOptions ++= Seq(
   "-Xlint:deprecation",
