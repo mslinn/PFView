@@ -36,7 +36,7 @@ scalacOptions ++= (
 
 scalaVersion := "2.12.10"
 
-crossScalaVersions := Seq("2.10.6", "2.11.12", "2.12.10", "2.13.0")
+crossScalaVersions := Seq("2.10.6", "2.11.12", "2.12.10", "2.13.1")
 
 resolvers += "micronautics/scala on bintray" at "https://dl.bintray.com/micronautics/scala"
 
